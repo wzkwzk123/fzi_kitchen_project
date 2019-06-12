@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<robot name="mobile_kitchen_assistant"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Import Kitchen -->
+  <xacro:include filename="$(find robot_kitchen_description)/urdf/robot_kitchen.macro.xacro"/>
+
+  <!-- Import Axis -->
+  <xacro:include filename="$(find linearaxis_description)/urdf/linearaxis.macro.xacro" />
+
+  <!-- Import Tool - Adapter -->
+  <xacro:include filename="$(find auror_assemble)/description/urdf/ur5_adapter.urdf.xacro"/>
+
+  <!-- Import UR5 -->
+  <xacro:include filename="$(find auror_assemble)/description/urdf/aurora_ur5_gazebo.xacro" />
+
+  <!-- Import Tool - Adapter -->
+  <xacro:include filename="$(find auror_assemble)/description/urdf/adapter.urdf.xacro"/>
+
+  <!-- Import Gripper Schunk PG70 
+  <xacro:include filename="$(find auror_assemble)/description/urdf/pg70.urdf.xacro"/>
+  -->
+    <xacro:include filename="$(find schunk_pg70)/urdf/pg70_gazebo.urdf.xacro"/>
+
+
+  <link name ="world"/>
+  <link name ="map"/>
+  <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
+
+
+  <!-- Position the reference frame of the Maestro camera system -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="world" />
+    <child link="map" />
+    <origin xyz="1.0 1.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- Position Kitchen -->
+  <xacro:kitchen prefix="aurora_" parent="world" model="aurora">
+    <origin xyz="0.0 0.0 1.2" rpy="0.0 0.0 0.0"/>
+  </xacro:kitchen>
+
+  <!-- Create UR5_Robot instance -->
+  <xacro:ur5_robot prefix="" joint_limited="false" transmission_hw_interface="$(arg transmission_hw_interface)"/>
+
+  <!-- Position Axis -->
+  <xacro:my_axis prefix="toothedbelt_" parent="aurora_kitchen_reference" size="long">
+    <origin xyz="0.09 0.025 -0.18" rpy="0.0 0.0 0.0"/>
+  </xacro:my_axis>
+
+  <!-- UR5 - Base Adapter -->
+  <xacro:ur5_adapter parent="toothedbelt_table_reference" prefix="">
+    <origin xyz="0 0 0" rpy="0 0 -${pi/2}"/>
+  </xacro:ur5_adapter>
+
+  <!-- Position UR5_Robot -->
+  <joint name="base_adapter_to_ur5" type="fixed">
+    <parent link="ur5_adapter_base_link" />
+    <child link = "base_link" />
+  </joint>
+
+  <!-- Adapter UR to Endeffector Position -->
+  <xacro:adapter parent="tool0" prefix="">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:adapter>
+
+  <!--PG70 Position 
+  <xacro:schunk_pg70 prefix="pg70" parent="adapter_reference">
+    <origin xyz="0 0 0" rpy="${pi/2.} 0 ${pi/2.}"/>
+  </xacro:schunk_pg70>
+  -->
+    <xacro:schunk_pg70 name="schunk" parent="adapter_reference">
+    <origin xyz="0 0 0" rpy="${pi/2.} 0 ${pi/2.}"/>
+  </xacro:schunk_pg70>
+
+
+
+  <!--
+  <link name="right_leg">
+    <visual>
+      <geometry>
+        <box size="0.6 0.1 0.2"/>
+      </geometry>
+    </visual>
+  </link>
+
+    <joint name="base_to_right_leg" type="fixed">
+    <parent link="screw_table_reference"/>
+    <child link="right_leg"/>
+  </joint>
+-->
+
+</robot>

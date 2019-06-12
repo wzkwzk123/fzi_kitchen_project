@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="mobile_kitchen_assistant"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Import UR5 -->
+  <xacro:include filename="$(find auro_gazebo_view)/urdf/aurora_ur5.urdf.xacro" />
+
+  <!-- Import Tool - Adapter -->
+  <xacro:include filename="$(find auror_assemble)/description/urdf/adapter.urdf.xacro"/>
+
+  <!-- Import Gripper Schunk PG70 
+  <xacro:include filename="$(find auror_assemble)/description/urdf/pg70.urdf.xacro"/>
+  -->
+  <xacro:include filename="$(find schunk_pg70)/urdf/pg70_gazebo.urdf.xacro"/>
+
+
+  <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
+
+
+
+  <!-- Adapter UR to Endeffector Position -->
+  <xacro:adapter parent="tool0" prefix="">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:adapter>
+
+  <!--PG70 Position 
+  <xacro:schunk_pg70 prefix="pg70" parent="adapter_reference">
+    <origin xyz="0 0 0" rpy="${pi/2.} 0 ${pi/2.}"/>
+  </xacro:schunk_pg70>
+  -->
+    <xacro:schunk_pg70 name="schunk" parent="adapter_reference">
+    <origin xyz="0 0 0" rpy="${pi/2.} 0 ${pi/2.}"/>
+  </xacro:schunk_pg70>
+
+
+
+
+
+</robot>

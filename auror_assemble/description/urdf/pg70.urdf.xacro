@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <!-- Macros definitions -->
+    <xacro:macro name="schunk_pg70" params="prefix parent *origin">
+        <!-- Schunk PG70 plus -->
+        <link name="${prefix}_base_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://schunk_pg70/meshes/pg70.dae"/>
+                </geometry>
+            </visual>
+
+        <collision>
+        <geometry>
+          <mesh filename="package://schunk_pg70/meshes/pg70.dae" />
+        </geometry>
+        <material name="blue"/>
+        </collision>
+        </link>
+
+        <gazebo reference="${prefix}_base_link">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+
+        <joint name="${prefix}base_link_joint" type="fixed">
+            <parent link="${parent}" />
+            <child link="${prefix}_base_link" />
+            <xacro:insert_block name="origin"/>
+        </joint>
+
+        <!-- Schunk PG70 plus gripper jaws -->
+        <link name="${prefix}_jaw_b">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                  <mesh filename="package://aurora_min_demo/description/meshes/pg70_jaw.dae"/>
+                </geometry>
+            </visual>
+
+        <collision>
+        <geometry>
+          <mesh filename="package://aurora_min_demo/description/meshes/pg70_jaw.dae" />
+        </geometry>
+        <material name="blue"/>
+        </collision>
+        </link>
+
+        <gazebo reference="${prefix}_jaw_b">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+
+        <joint name="${prefix}_jaw_b_joint" type="prismatic">
+            <parent link="${prefix}_base_link" />
+            <child link="${prefix}_jaw_b" />
+            <origin xyz="0.0 0.0885 0" rpy="0 0 0" />
+            <limit effort="100" lower="0.0005" upper="0.03275" velocity="2.0"/>
+            <axis xyz="1 0 0" />
+        </joint>
+        <link name="${prefix}_jaw_a">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                  <mesh filename="package://aurora_min_demo/description/meshes/pg70_jaw.dae"/>
+                </geometry>
+            </visual>
+        <collision>
+        <geometry>
+          <mesh filename="package://aurora_min_demo/description/meshes/pg70_jaw.dae" />
+        </geometry>
+        <material name="blue"/>
+        </collision>
+        </link>
+
+        <gazebo reference="${prefix}_jaw_a">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+
+
+        <joint name="${prefix}_jaw_a_joint" type="prismatic">
+            <mimic joint="${prefix}_jaw_b_joint" multiplier="1" offset="0"/>
+            <parent link="${prefix}_base_link" />
+            <child link="${prefix}_jaw_a" />
+            <origin xyz="0 0.0885 0" rpy="0 ${pi} 0 "/>
+            <limit effort="100" lower="0.0005" upper="0.03275" velocity="2.0"/>
+            <axis xyz="1 0 0" />
+        </joint>
+    </xacro:macro>    <!-- end_effector -->
+</robot>

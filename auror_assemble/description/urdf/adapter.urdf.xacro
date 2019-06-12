@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot name="adapter" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="adapter" params="parent prefix *origin">
+
+        <xacro:property name="adapter_length" value="0.07"/>
+        <xacro:property name="adapter_width" value="0.07"/>
+        <xacro:property name="adapter_height" value="0.03"/>
+        <xacro:property name="adapter_mass" value="1"/>
+
+
+        <xacro:macro name="box_inertial" params="length width height mass">
+            <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="${0.0833333 * mass * (width * width + height * height)}" ixy="0.0" ixz="0.0"
+            iyy="${0.0833333 * mass * (length * length + height * height)}" iyz="0.0"
+            izz="${0.083 * length * length + width * width}" />
+            </inertial>
+        </xacro:macro>
+
+        <link name="${prefix}adapter_base_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://aurora_min_demo/description/meshes/adapter_set.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${adapter_height/2.}" rpy="0 0 0"/>
+                <geometry>
+                    <box size ="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+            <box_inertial length="${adapter_length/2}" width="${adapter_width/2}" height="${adapter_height}" mass="${adapter_mass}"/>
+
+        </link>
+
+        <gazebo reference="${prefix}adapter_base_link">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+
+        <link name="${prefix}adapter_reference"/>
+
+
+        <joint name="${parent}_to_${prefix}adapter_base_link" type="fixed">
+            <xacro:insert_block name="origin"/>
+            <parent link="${parent}"/>
+            <child link="${prefix}adapter_base_link"/>
+        </joint>
+        <joint name="${prefix}adapter_base_link_to_${prefix}adapter_reference" type="fixed">
+            <origin xyz="0 0 ${adapter_height}" rpy="0 0 0"/>
+            <parent link="${prefix}adapter_base_link"/>
+            <child link="${prefix}adapter_reference"/>
+        </joint>
+
+    </xacro:macro>
+
+    </robot>
+

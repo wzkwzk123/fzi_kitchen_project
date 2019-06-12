@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot name="kitchen_robot" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--include Robot-->
+    <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+    <xacro:macro name="kitchen_bot" params="prefix joint_limited">
+        <!-- Barebone UR 5-->
+        <xacro:ur5_robot prefix="${prefix}" joint_limited="${joint_limited}"/>
+    </xacro:macro>
+</robot>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot name="ur5_adapter" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="ur5_adapter" params="parent prefix *origin">
+
+        <xacro:property name="ur5_adapter_length" value="0.15"/>
+        <xacro:property name="ur5_adapter_width" value="0.15"/>
+        <xacro:property name="ur5_adapter_height" value="0.0154"/>
+
+        <link name="${prefix}ur5_adapter_base_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://aurora_min_demo/description/meshes/ur5_adapter.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 ${ur5_adapter_height/2.}" rpy="0 0 0"/>
+                <geometry>
+                    <box size ="${ur5_adapter_length} ${ur5_adapter_width} ${ur5_adapter_height}"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="${prefix}ur5_adapter_base_link">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+
+        <link name="${prefix}ur5_adapter_reference"/>
+
+
+        <joint name="${parent}_to_${prefix}ur5_adapter_base_link" type="fixed">
+            <xacro:insert_block name="origin"/>
+            <parent link="${parent}"/>
+            <child link="${prefix}ur5_adapter_base_link"/>
+        </joint>
+
+        <joint name="${prefix}ur5_adapter_base_link_to_${prefix}ur5_adapter_reference" type="fixed">
+            <origin xyz="0 0 ${ur5_adapter_height}" rpy="0 0 0"/>
+            <parent link="${prefix}ur5_adapter_base_link"/>
+            <child link="${prefix}ur5_adapter_reference"/>
+        </joint>
+
+    </xacro:macro>
+
+</robot>
+

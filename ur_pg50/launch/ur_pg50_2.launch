@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts gazebo gui" />
+  
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
+
+
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find auro_gazebo_view)/urdf/ur5_with_pg50_gazebo.urdf.xacro'" />
+
+
+
+
+
+
+
+
+
+
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.1" respawn="false" output="screen" />
+
+
+
+  <include file="$(find ur_pg50)/launch/ur_pg50_states.launch"/>
+
+
+
+  <include file="$(find ur_pg50)/launch/gazebo_controller.launch"/>
+<include file="$(find new_ur_pg_moveit_config)/launch/moveit_planning_execution.launch"/>
+  
+
+
+</launch>

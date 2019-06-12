@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="mobile_kitchen_assistant"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Import Kitchen -->
+  <xacro:include filename="$(find robot_kitchen_description)/urdf/robot_kitchen.macro.xacro"/>
+
+
+
+  <!-- Position Kitchen -->
+  <xacro:kitchen prefix="aurora_" parent="world" model="aurora">
+    <origin xyz="0.0 0.0 1.2" rpy="0.0 0.0 0.0"/>
+  </xacro:kitchen>
+
+  <link name ="world"/>
+
+
+</robot>

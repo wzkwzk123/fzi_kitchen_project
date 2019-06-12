@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts gazebo gui" />
+    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="use_sim_time" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+
+    <!-- We resume the logic in empty_world.launch -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+    <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find auror_assemble)/description/urdf/aurora_ur5_pg50.xacro'" />
+  
+
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+  args="-urdf -model arm -param robot_description"/>
+
+
+  <include file="$(find ur_pg50)/launch/ur_pg50_states.launch"/>
+
+  <include file="$(find ur_pg50)/launch/gazebo_controller.launch"/>
+ 
+
+    <include file="$(find new_ur_pg_moveit_config)/launch/moveit_planning_execution.launch"/>
+
+
+</launch>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot name="linearaxis" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- BASE -->
+  <link name ="world"/>
+  <!-- Import Axis -->
+  <xacro:include filename="$(find linearaxis_description)/urdf/linearaxis.macro.xacro" ns="la"/>
+  <!--Axis Position-->
+  <xacro:la.my_axis prefix="toothedbelt_" parent="world" size="long">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:la.my_axis>
+</robot>

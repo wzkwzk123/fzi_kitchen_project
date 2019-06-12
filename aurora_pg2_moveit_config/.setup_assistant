@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: auro_gazebo_view
+    relative_path: urdf/ur5_with_pg50_gazebo.urdf.xacro
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/mobile_kitchen_assistant.srdf
+  CONFIG:
+    author_name: sdfd
+    author_email: d@gmail.com
+    generated_timestamp: 1560178927
